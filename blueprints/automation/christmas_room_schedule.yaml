@@ -1,0 +1,137 @@
+blueprint:
+  name: Christmas Room – light schedule
+  description: >-
+    Turns on everything with the chosen label at sunset (± offset) or at a fixed time,
+    and turns everything off again at the end time (lights, optional scent diffuser and
+    media player). All settings live in helpers, so they can be changed from the ⚙️ panel
+    of the Christmas Room Card.
+
+
+    Helpers you need: an input_boolean (schedule on/off), an input_select with the options
+    "sunset" and "time" (German: "Sonnenuntergang" / "Uhrzeit"), an input_number for the
+    sunset offset in minutes (e.g. −120 … 120, step 5) and two input_datetime helpers
+    (time only) for start and end.
+  domain: automation
+  source_url: https://github.com/Severinius-MUC/christmas-room-card/blob/main/blueprints/automation/christmas_room_schedule.yaml
+  input:
+    lights_label:
+      name: Label of the Christmas lights
+      description: Every entity with this label is switched on at the start and off at the end.
+      selector:
+        label: {}
+    schedule_enabled:
+      name: Schedule active (input_boolean)
+      selector:
+        entity:
+          domain: input_boolean
+    start_mode:
+      name: Start mode (input_select with "sunset" / "time")
+      selector:
+        entity:
+          domain: input_select
+    start_offset:
+      name: Offset to sunset in minutes (input_number)
+      selector:
+        entity:
+          domain: input_number
+    start_time:
+      name: Start time for fixed-time mode (input_datetime)
+      selector:
+        entity:
+          domain: input_datetime
+    end_time:
+      name: End time – everything off (input_datetime)
+      selector:
+        entity:
+          domain: input_datetime
+    scent_select:
+      name: Scent diffuser fragrance select (optional)
+      description: e.g. the Pura "fragrance" select. It is set to "off" at the end time.
+      default: ""
+      selector:
+        entity:
+          domain: select
+    media_player:
+      name: Media player (optional)
+      description: Paused at the end time if it is playing.
+      default: ""
+      selector:
+        entity:
+          domain: media_player
+
+mode: queued
+
+trigger_variables:
+  offset_entity: !input start_offset
+
+triggers:
+  - trigger: time
+    at: !input start_time
+    id: start_time
+  - trigger: template
+    id: start_sun
+    value_template: >-
+      {% set ns = state_attr('sun.sun', 'next_setting') %}
+      {% if ns %}
+        {% set n = as_local(as_datetime(ns)) %}
+        {% set s = n if n.date() == now().date() else n - timedelta(days=1) %}
+        {% set st = s + timedelta(minutes=states(offset_entity) | int(0)) %}
+        {{ st <= now() < st + timedelta(minutes=2) }}
+      {% else %}false{% endif %}
+  - trigger: time
+    at: !input end_time
+    id: end
+
+variables:
+  mode_entity: !input start_mode
+  scent: !input scent_select
+  player: !input media_player
+  sun_mode: "{{ states(mode_entity) is search('sun|sonn', ignorecase=True) }}"
+
+conditions:
+  - condition: state
+    entity_id: !input schedule_enabled
+    state: "on"
+
+actions:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id: start_time
+          - "{{ not sun_mode }}"
+        sequence:
+          - action: homeassistant.turn_on
+            target:
+              label_id: !input lights_label
+      - conditions:
+          - condition: trigger
+            id: start_sun
+          - "{{ sun_mode }}"
+        sequence:
+          - action: homeassistant.turn_on
+            target:
+              label_id: !input lights_label
+      - conditions:
+          - condition: trigger
+            id: end
+        sequence:
+          - action: homeassistant.turn_off
+            target:
+              label_id: !input lights_label
+            continue_on_error: true
+          - if:
+              - "{{ scent != '' }}"
+            then:
+              - action: select.select_option
+                target:
+                  entity_id: "{{ scent }}"
+                data:
+                  option: "off"
+                continue_on_error: true
+          - if:
+              - "{{ player != '' and is_state(player, 'playing') }}"
+            then:
+              - action: media_player.media_pause
+                target:
+                  entity_id: "{{ player }}"
+                continue_on_error: true
