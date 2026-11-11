@@ -7,7 +7,7 @@ Every object in the room is tappable and runs a real action in your home.
 
 - **Christmas tree, balcony-door garland, garden lights (seen through the window) and a wreath** – each linked to an entity. The lights twinkle while the entity is on.
 - **Scent candles** – switch any entity, or control a **Pura** diffuser directly: both fragrance slots with fill level, intensity and timer.
-- **Music** – any `media_player` with sources (e.g. Sonos favourites): up to 6 playlists as tiles, shuffle, play/pause and volume.
+- **Music** – any `media_player`: up to 6 playlists as tiles – player favourites (e.g. Sonos) **and Spotify, radio stations or Music Assistant playlists** picked with the Home Assistant media browser. Shuffle, play/pause and volume.
 - **Schedule** – lights on at sunset (± offset) or at a fixed time, everything off at a set time. Editable right from the card (⚙️).
 - **Tear-off calendar** counting down the days until Christmas Eve.
 - Full-screen, adapts to landscape and portrait (tablet, phone, wall panel).
@@ -63,9 +63,19 @@ music:
   entity: media_player.living_room
   on_states: [playing]
   random: true
-  sources:                          # optional, max. 6 – empty = all Christmas favourites
+  sources:                          # optional: player favourites/sources (Sonos favourites)
     - Christmas FM
-    - Christmas Favourites
+  playlists:                        # optional: anything from the media browser
+    - name: Spotify Christmas Hits
+      media:
+        entity_id: media_player.living_room
+        media_content_id: spotify:playlist:37i9dQZF1DX0Yxoavh5qJV
+        media_content_type: playlist
+    - name: Christmas Radio
+      media:
+        entity_id: media_player.living_room
+        media_content_id: media-source://radio_browser/<station-uuid>
+        media_content_type: audio/mpeg
 schedule:                           # optional, see below
   enabled: input_boolean.xmas_schedule
   start_mode: input_select.xmas_start_mode
@@ -96,7 +106,9 @@ schedule:                           # optional, see below
 | `on_states` | Optional list of states that count as "on" (default: everything except off, idle, paused, unavailable …). |
 | `name` | Optional label for the button. |
 
-**Music** (when `entity` is a `media_player`): `controls` (panel on/off), `sources` (max. 6, defaults to all sources containing *Christmas / Weihnacht / Xmas / Advent …*), `random` (shuffle tile).
+**Music** (when `entity` is a `media_player`): `controls` (panel on/off), `sources` (player favourites/sources, default: all sources containing *Christmas / Weihnacht / Xmas / Advent …*), `playlists` (own media, see below), `random` (shuffle tile). Favourites and playlists together show at most 6 tiles.
+
+**Own playlists (Spotify, radio, Music Assistant):** in the editor, open *Music → Own playlists* and add an entry. Pick a player and browse to the playlist, station or album with the Home Assistant media browser – e.g. *Spotify*, *Radio Browser* or the *Music Assistant* library (choose the Music Assistant player of your speaker). The card plays it with `media_player.play_media` on that player. Play/pause, volume and the visuals still follow the main `entity`.
 
 **Scent candles with Pura**: set `pura_device` to the device of the [Pura integration](https://github.com/natekspencer/hacs-pura). The card finds the fragrance and intensity selects, slot sensors and timer itself. Options: `timers` (list of minutes, `0` = continuous), `default_timer`, `default_intensity` (`gentle`, `subtle`, `medium`, `strong`, `intense`).
 
@@ -122,7 +134,7 @@ The schedule runs in Home Assistant – it also works when no dashboard is open.
 
 ## 🇩🇪 Deutsch
 
-Ein gemütliches, animiertes Weihnachts-Wohnzimmer fürs Dashboard. Jedes Objekt ist antippbar und schaltet etwas in deinem Zuhause: **Baum, Girlande an der Balkontür, Gartenbeleuchtung im Fenster, Kranz, Duftkerzen** (beliebige Entität oder direkt ein **Pura**-Duftspender mit Slots, Intensität und Timer) und **Musik** (jeder Media-Player mit Quellen, z. B. Sonos-Favoriten – bis zu 6 Playlists, Zufall, Lautstärke). Dazu ein **Abreißkalender** als Countdown bis Heiligabend und ein **Zeitplan** (Lichter bei Sonnenuntergang ± Versatz oder zu fester Uhrzeit an, alles zu einer Endzeit aus), der direkt in der Karte über ⚙️ eingestellt wird.
+Ein gemütliches, animiertes Weihnachts-Wohnzimmer fürs Dashboard. Jedes Objekt ist antippbar und schaltet etwas in deinem Zuhause: **Baum, Girlande an der Balkontür, Gartenbeleuchtung im Fenster, Kranz, Duftkerzen** (beliebige Entität oder direkt ein **Pura**-Duftspender mit Slots, Intensität und Timer) und **Musik** (jeder Media-Player – bis zu 6 Playlists aus Sonos-Favoriten, **Spotify, Radio oder Music Assistant** über die Medienauswahl, Zufall, Lautstärke). Dazu ein **Abreißkalender** als Countdown bis Heiligabend und ein **Zeitplan** (Lichter bei Sonnenuntergang ± Versatz oder zu fester Uhrzeit an, alles zu einer Endzeit aus), der direkt in der Karte über ⚙️ eingestellt wird.
 
 ![Deutsch](images/room_de.jpg)
 

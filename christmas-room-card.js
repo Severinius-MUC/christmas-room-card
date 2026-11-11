@@ -4,7 +4,7 @@
  * and runs a Home Assistant action. German + English UI.
  * https://github.com/Severinius-MUC/christmas-room-card  ·  MIT License
  */
-const WZ_VERSION = '1.0.0';
+const WZ_VERSION = '1.1.0';
 const WZ_I18N = {
   de: {
     title: 'Frohe Weihnachten', on: 'an', off: 'aus',
@@ -29,7 +29,8 @@ const WZ_I18N = {
         title: 'Titel', fit: 'Bildanpassung', height: 'Höhe (leer = ganzer Bildschirm, „auto“ = Seitenverhältnis)', language: 'Sprache (leer = wie Home Assistant)',
         show_chips: 'Schaltknöpfe unten anzeigen', name: 'Anzeigename', entity: 'Entität (Zustand steuert die Optik)',
         action: 'Aktion beim Antippen (optional – sonst wird die Entität geschaltet)', on_states: 'Zustände, die als „an“ gelten (optional)',
-        controls: 'Bedien-Panel unten anzeigen', sources: 'Playlists/Sender zur Auswahl (max. 6, Reihenfolge per Ziehen; leer = Weihnachts-Favoriten)',
+        controls: 'Bedien-Panel unten anzeigen', sources: 'Favoriten/Quellen des Players (Sonos-Favoriten; leer = alle Weihnachts-Favoriten)',
+        playlists: 'Eigene Playlists – Spotify, Radio, Music Assistant … (zusammen mit den Favoriten max. 6)', pl_name: 'Name (optional)', pl_media: 'Medium auswählen',
         random: 'Zufall-Kachel anbieten (jedes Mal eine andere Playlist)', default_timer: 'Standard-Timer in Minuten (0 = dauerhaft)', default_intensity: 'Standard-Intensität',
         enabled: 'Schalter „Zeitplan aktiv“', start_mode: 'Startmodus (Sonnenuntergang / Uhrzeit)', start_offset: 'Versatz zum Sonnenuntergang (min)',
         sun_start: 'Sensor „Start bei Sonnenuntergang“ (optional)', start_time: 'Startzeit (Modus Uhrzeit)', end_time: 'Endzeit (alles aus)', label: 'Name des Labels (nur zur Anzeige)',
@@ -60,7 +61,8 @@ const WZ_I18N = {
         title: 'Title', fit: 'Scaling', height: 'Height (empty = full screen, "auto" = aspect ratio)', language: 'Language (empty = like Home Assistant)',
         show_chips: 'Show buttons at the bottom', name: 'Display name', entity: 'Entity (its state drives the visuals)',
         action: 'Tap action (optional – otherwise the entity is toggled)', on_states: 'States that count as "on" (optional)',
-        controls: 'Show control panel at the bottom', sources: 'Playlists/stations to choose from (max. 6, drag to reorder; empty = Christmas favourites)',
+        controls: 'Show control panel at the bottom', sources: 'Player favourites/sources (e.g. Sonos favourites; empty = all Christmas favourites)',
+        playlists: 'Own playlists – Spotify, radio, Music Assistant … (max. 6 together with favourites)', pl_name: 'Name (optional)', pl_media: 'Choose media',
         random: 'Offer a shuffle tile (a different playlist every time)', default_timer: 'Default timer in minutes (0 = continuous)', default_intensity: 'Default intensity',
         enabled: 'Switch "schedule active"', start_mode: 'Start mode (sunset / fixed time)', start_offset: 'Offset to sunset (min)',
         sun_start: 'Sensor "start at sunset" (optional)', start_time: 'Start time (fixed-time mode)', end_time: 'End time (everything off)', label: 'Label name (display only)',
@@ -294,9 +296,9 @@ class ChristmasRoomCard extends HTMLElement {
         const st = this._hass.states[it.entity];
         const e = { entity_id: it.entity };
         if (!next) this._hass.callService('media_player', 'media_pause', e);
-        else if (this._source === WZ_RND) this._hass.callService('media_player', 'select_source', Object.assign({ source: this._pickRandom() }, e));
-        else if (st && st.state === 'paused' && (!this._source || st.attributes.source === this._source)) this._hass.callService('media_player', 'media_play', e);
-        else if (this._source) this._hass.callService('media_player', 'select_source', Object.assign({ source: this._source }, e));
+        else if (this._source === WZ_RND) this._playItem(this._pickRandom());
+        else if (st && st.state === 'paused' && (!this._source || st.attributes.source === this._source || this._lastPlayed === this._source)) this._hass.callService('media_player', 'media_play', e);
+        else if (this._source) this._playItem(this._source);
         else this._hass.callService('media_player', 'media_play', e);
       } else if (it.entity) {
         this._hass.callService('homeassistant', next ? 'turn_on' : 'turn_off', { entity_id: it.entity });
@@ -324,14 +326,40 @@ class ChristmasRoomCard extends HTMLElement {
     const st = it.entity && this._hass && this._hass.states[it.entity];
     if (!st || !it.entity.startsWith('media_player.') || it.controls === false) return null;
     const all = st.attributes.source_list || [];
-    let list = Array.isArray(it.sources) && it.sources.length ? it.sources.slice() : all.filter((s) => /christ|weihn|xmas|advent|noel|navidad|carol/i.test(s));
-    if (!list.length) list = all;
+    const items = {};
+    let list = [];
+    const add = (name, x) => { if (name && !items[name]) { items[name] = x; list.push(name); } };
+    const favCfg = Array.isArray(it.sources) && it.sources.length ? it.sources : null;
+    (favCfg || []).forEach((s) => add(s, { kind: 'source' }));
+    (Array.isArray(it.playlists) ? it.playlists : []).forEach((p) => {
+      if (!p) return;
+      const md = p.media || {}, meta = md.metadata || {};
+      const id = p.media_content_id || md.media_content_id;
+      if (!id) return;
+      add(p.name || meta.title || id, { kind: 'media', id, type: p.media_content_type || md.media_content_type || 'music',
+        entity: p.entity || md.entity_id || it.entity, thumb: p.image || meta.thumbnail || '' });
+    });
+    if (!favCfg) all.filter((s) => /christ|weihn|xmas|advent|noel|navidad|carol/i.test(s)).forEach((s) => add(s, { kind: 'source' }));
+    if (!list.length) all.forEach((s) => add(s, { kind: 'source' }));
     list = list.slice(0, 6);
     const rnd = !!it.random;
-    const cur = st.attributes.source;
+    const src = st.attributes.source;
+    const cur = list.includes(src) ? src : (st.state === 'playing' && this._lastPlayed && list.includes(this._lastPlayed) ? this._lastPlayed : src);
     if (!((this._source === WZ_RND && rnd) || list.includes(this._source))) this._source = list.includes(cur) ? cur : (it.source && list.includes(it.source) ? it.source : list[0]);
     const vol = typeof st.attributes.volume_level === 'number' ? Math.round(st.attributes.volume_level * 100) : null;
-    return { entity: it.entity, list, source: this._source, cur, rnd, vol, playing: this._isOn('music') };
+    return { entity: it.entity, list, items, source: this._source, cur, rnd, vol, playing: this._isOn('music') };
+  }
+  _playItem(name) {
+    const m = this._music();
+    if (!m || !name || !this._hass) return;
+    const x = m.items[name] || { kind: 'source' };
+    this._lastPlayed = name;
+    if (x.kind === 'media') {
+      this._hass.callService('media_player', 'play_media', { entity_id: x.entity, media_content_id: x.id, media_content_type: x.type });
+    } else {
+      this._hass.callService('media_player', 'select_source', { entity_id: m.entity, source: name });
+    }
+    this._opt.music = { val: true, until: Date.now() + 8000 };
   }
   _pickRandom() {
     const m = this._music();
@@ -463,7 +491,12 @@ class ChristmasRoomCard extends HTMLElement {
     // Popover
     let html = '';
     if (this._popOpen === 'music' && m) {
-      const icon = (s) => /favou?rite/i.test(s) ? '❤️' : /top|hits/i.test(s) ? '⭐' : /radio|fm/i.test(s) ? '📻' : '🎄';
+      const icon = (s) => {
+        const x = m.items[s] || {};
+        if (x.thumb) return `<img class="tthumb" src="${esc(x.thumb)}" alt="" loading="lazy">`;
+        if (x.kind === 'media') return /spotify/i.test(x.id) ? '🎧' : /radio/i.test(x.id + ' ' + x.type) ? '📻' : '🎼';
+        return /favou?rite/i.test(s) ? '❤️' : /top|hits/i.test(s) ? '⭐' : /radio|fm/i.test(s) ? '📻' : '🎄';
+      };
       html = `<div class="pophead"><span>🎵 ${WZ_T.musicTitle}</span><button class="x" data-act="close">✕</button></div>
         <div class="tiles">${m.list.map((s) => `<button class="tile ${s === m.source ? 'sel' : ''}" data-src="${esc(s)}"><span class="ti">${icon(s)}</span><span class="tn">${esc(s)}</span>${s === (m.source === WZ_RND ? m.cur : m.source) && m.playing ? '<span class="eq on"><i></i><i></i><i></i></span>' : ''}</button>`).join('')}${m.rnd ? `<button class="tile rnd ${m.source === WZ_RND ? 'sel' : ''}" data-src="${WZ_RND}"><span class="ti">🎲</span><span class="tn">${WZ_T.random}<br><span class="sm">${WZ_T.randomSub}</span></span></button>` : ''}</div>
         <div class="row"><button class="big ${m.playing ? 'off' : ''}" data-act="music-toggle">${m.playing ? WZ_T.pause : WZ_T.play}</button>
@@ -509,13 +542,13 @@ class ChristmasRoomCard extends HTMLElement {
     if (b.dataset.src === WZ_RND && m) {
       this._source = WZ_RND;
       const pick = this._pickRandom();
-      if (pick) this._hass.callService('media_player', 'select_source', { entity_id: m.entity, source: pick });
+      if (pick) this._playItem(pick);
       this._opt.music = { val: true, until: Date.now() + 8000 };
       this._apply(); this._dock(true); return;
     }
     if (b.dataset.src != null && m) {
       this._source = b.dataset.src;
-      this._hass.callService('media_player', 'select_source', { entity_id: m.entity, source: b.dataset.src });
+      this._playItem(b.dataset.src);
       this._opt.music = { val: true, until: Date.now() + 8000 };
       this._apply(); this._dock(true); return;
     }
@@ -637,6 +670,7 @@ class ChristmasRoomCard extends HTMLElement {
   .gear:hover { background:rgba(243,200,90,.2); }
   .tin { background:rgba(255,255,255,.06); color:#f5ead8; border:1px solid rgba(243,217,139,.3); border-radius:10px; padding:7px 10px; font:inherit; color-scheme:dark; }
   .tile.rnd { border-style:dashed; }
+  .tthumb { width:30px; height:30px; border-radius:7px; object-fit:cover; display:block; }
   .cal { cursor:default; }
   .cal .pg { transition: filter .8s; }
   .tree-on .cal .pg { filter: drop-shadow(0 0 6px rgba(255,200,110,.35)); }
@@ -970,6 +1004,10 @@ function wzEditorSchema(hass, cfg) {
     item('music', 'mdi:music', [
       { name: 'controls', selector: { boolean: {} } },
       { name: 'sources', selector: { select: { multiple: true, custom_value: true, reorder: true, options: srcOpts } } },
+      { name: 'playlists', selector: { object: { multiple: true, label_field: 'name', fields: {
+        name: { label: T.ed.labels.pl_name, selector: { text: {} } },
+        media: { label: T.ed.labels.pl_media, required: true, selector: { media: {} } }
+      } } } },
       { name: 'random', selector: { boolean: {} } }
     ]),
     { type: 'expandable', name: 'schedule', title: T.ed.titles.schedule, icon: 'mdi:calendar-clock', schema: [
