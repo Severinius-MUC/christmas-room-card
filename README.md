@@ -101,6 +101,7 @@ schedule:                           # optional, see below
 | `height` | Card height. Default: full screen below the header. `auto` = fixed 5:3 aspect ratio (for normal dashboards). |
 | `show_chips` | Show the buttons at the bottom (default `true`). |
 | `tree`, `door`, `garden`, `wreath`, `candles`, `music` | One object each, see below. |
+| `ceiling` | Modern style: pendant ceiling light – when on, the whole room is bright (follows the light's `brightness`). The button is always shown in the modern style; without an `entity` it is a pure display toggle. |
 | `sideboard` | Modern style: indirect LED light under the sideboard. With an `entity` it gets its own button and takes the light's colour (`rgb_color`); without one it simply follows the tree. |
 | `schedule` | Helpers for the schedule panel, see below. |
 
@@ -145,7 +146,7 @@ Ein gemütliches, animiertes Weihnachts-Wohnzimmer fürs Dashboard. Jedes Objekt
 
 ![Deutsch](images/room_de.jpg)
 
-**Stil:** `style: classic` (gezeichnet, Standard) oder `style: modern` (Foto – jedes eingeschaltete Objekt leuchtet in seinem Bereich auf, die Lichterketten blinken, alles andere bleibt gedimmt; Musik kommt aus dem Smart-Radio neben dem Sessel). Optional `sideboard: { entity: light.… }` für die indirekte Beleuchtung unter dem Sideboard – übernimmt die Farbe des Lichts.
+**Stil:** `style: classic` (gezeichnet, Standard) oder `style: modern` (Foto – jedes eingeschaltete Objekt leuchtet in seinem Bereich auf, die Lichterketten blinken, alles andere bleibt gedimmt; Musik kommt aus dem Smart-Radio neben dem Sessel). Optional `ceiling: { entity: light.… }` für das Deckenlicht (macht den ganzen Raum hell, folgt der Helligkeit) und `sideboard: { entity: light.… }` für die indirekte Beleuchtung unter dem Sideboard – übernimmt die Farbe des Lichts.
 
 **Installation:** *Einstellungen → Marketplace → Add from link* → `https://github.com/Severinius-MUC/christmas-room-card` (oder manuell wie oben beschrieben). Danach am besten eine Ansicht vom Typ **Panel** anlegen und die Karte „Christmas Room Card“ hinzufügen – alles Weitere im grafischen Editor.
 
