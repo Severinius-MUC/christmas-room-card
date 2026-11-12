@@ -222,7 +222,12 @@ function wzBow(x, y, s) {
 const WZM = {
   tree: [[1293, 28], [1332, 100], [1365, 185], [1412, 300], [1470, 430], [1520, 560], [1538, 625], [1440, 692], [1160, 692], [1092, 625], [1118, 520], [1170, 400], [1222, 262], [1258, 140]],
   doorOuter: [205, 86, 722, 670], doorInner: [258, 178, 680, 640],
-  wreath: [927, 268, 92], candles: [[896, 462, 92], [138, 622, 78]], calendar: [1036, 84]
+  wreath: [927, 268, 92], candles: [[896, 462, 92], [138, 622, 78]], calendar: [1036, 84],
+  // light bulbs detected in the bundled photo (x,y;x,y…) – they blink individually
+  b_tree: '1423,392;1402,518;1366,239;1378,335;1461,572;1321,316;1175,632;1252,204;1313,573;1328,416;1172,486;1141,636;1228,329;1315,240;1242,521;1247,397;1248,217;1303,503;1389,350;1404,381;1283,506;1483,581;1201,594;1389,604;1417,529;1336,644;1385,454;1433,476;1330,200;1199,384;1461,639;1317,561;1329,577;1359,404;1218,318;1492,636;1204,483;1389,294;1220,666;1255,280;1332,191;1360,327;1272,444;1266,179;1177,554;1376,606;1324,157;1296,242;1188,600;1229,278;1190,377;1288,497;1266,597;1238,604;1255,612;1261,320;1261,380;1301,394;1215,469;1355,380;1364,518;1448,547;1261,190;1245,269;1276,432;1458,653;1362,462;1471,652;1291,177;1219,481;1317,167;1208,383;1493,628;1303,580;1473,589;1191,461;1260,539;1368,597;1223,599;1251,196;1278,230;1319,373;1398,465;1191,583;1296,60;1363,261;1392,521;1450,579;1438,586;1162,589;1287,589;1154,596;1207,317;1348,491;1149,587;1175,664;1236,662;1284,182;1196,441;1480,549;1290,643;1305,67;1285,250;1305,373;1207,472;1446,486;1344,270;1239,281;1215,307;1277,324;1444,439;1246,457;1362,476;1185,517;1200,523;1337,587;1263,166;1242,234;1329,406;1263,452;1397,541;1415,636;1268,168;1310,200;1385,397;1378,400;1376,477;1425,494;1320,508;1273,511;1359,561;1212,600;1264,632;1250,231;1349,249;1232,316;1292,317;1241,323;1231,386;1396,391;1433,410;1350,416;1288,430;1164,494;1233,494;1227,525;1229,562;1411,618;1174,660;1357,223;1356,275;1269,289;1380,297;1239,330;1222,391;1264,400;1415,469;1168,474;1168,542;1167,594;1320,207;1337,316;1271,322;1235,395;1319,411;1228,462;1245,511;1358,512;1205,551;1359,556',
+  b_door: '215,381;658,162;288,162;686,429;714,308;360,116;257,428;243,353;272,148;687,505;685,241;263,117;308,138;259,162;701,284;231,137;686,157;658,176;239,385;229,228;530,162;689,204;696,476;571,126;231,347;534,147;515,133;703,160;715,281;250,294;226,314;239,458;680,585;695,622;243,426;655,115;600,135;666,142;252,260;704,372;695,463;243,205;694,347;698,416;326,125;634,127;691,302;297,113;554,127;245,150;234,180;237,278;237,298;245,451;679,523;422,142;626,144;406,153;586,152;244,183;213,226;214,263;690,270;321,120;251,336;256,128;398,129;698,182;240,403;345,147;383,151;243,256;232,263;684,299;245,334;223,377;627,162;692,182;371,131;708,131;225,167;705,323;240,118;402,140;690,140;212,205;234,278;249,456;686,578;249,288;692,566;604,114;606,162;692,339;251,468;675,119;269,136;643,139;255,194;250,204;709,329;695,377;223,384;702,501;298,150;637,152;260,158;284,158;628,159;221,172;697,177;231,209;700,240;229,248;257,290;256,363;703,454;681,460;577,117;280,121;548,162;213,253;689,323;227,381;686,521',
+  b_wreath: '936,206;880,247;870,284;976,286;962,320;875,217;900,223;980,235;871,318;922,211;964,302;888,328;979,220;885,225;991,260;916,198;961,203;927,317;857,243;871,266;864,270;984,293;991,303;979,248;867,290;916,205;862,282;859,301;893,326;862,229;862,298;884,310;969,234;894,205;989,242;976,250;858,257;988,268;974,304;902,310',
+  b_garden: '496,523;367,522;577,522;416,523;604,522;555,542;363,538;393,545;441,548;577,548;553,522;418,551;519,538;600,548;639,536;672,539;637,529;534,522;496,544;621,545;647,526;521,527;490,542;658,522;649,521;398,532;675,525;391,534;639,543;619,522;623,536;669,527;438,520;571,540;672,544;381,520;430,520;625,521;665,520;610,535',
 };
 function wzInPoly(x, y, poly) {
   let inside = false;
@@ -232,6 +237,27 @@ function wzInPoly(x, y, poly) {
   }
   return inside;
 }
+const WZ_TURNTABLE = `
+      <ellipse cx="110" cy="172" rx="118" ry="9" fill="#000" opacity=".45"/>
+      <path d="M18 14 L30 170 M30 170 L42 14 M178 14 L190 170 M190 170 L202 14" stroke="#141414" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+      <rect x="10" y="96" width="200" height="7" rx="2" fill="#6b4529"/>
+      <g>${['#b71c1c', '#e8e1d4', '#1d4d2f', '#c9a24a', '#2b3b5c', '#8e1b1b', '#d9c9a8', '#1b1b1b'].map((c, i) => `<rect x="${22 + i * 22}" y="${46 - (i % 3) * 3}" width="19" height="${50 + (i % 3) * 3}" rx="1.5" fill="${c}"/>`).join('')}</g>
+      <rect x="0" y="0" width="220" height="15" rx="3" fill="url(#gWalnut)"/>
+      <rect x="0" y="0" width="220" height="3" rx="1.5" fill="#d8a46a" opacity=".55"/>
+      <rect x="18" y="-24" width="184" height="24" rx="4" fill="url(#gWalnut)"/>
+      <rect x="18" y="-24" width="184" height="4" rx="2" fill="#e2b27a" opacity=".5"/>
+      <rect x="22" y="-6" width="176" height="5" rx="2" fill="#1a1a1a" opacity=".55"/>
+      <ellipse cx="88" cy="-27" rx="66" ry="11" fill="#2a2a2a"/>
+      <ellipse cx="88" cy="-29" rx="62" ry="10" fill="#0e0e0e"/>
+      <ellipse cx="88" cy="-29" rx="50" ry="8" fill="none" stroke="#2c2c2c"/><ellipse cx="88" cy="-29" rx="38" ry="6.2" fill="none" stroke="#262626"/>
+      <ellipse cx="88" cy="-29" rx="14" ry="2.6" fill="#b71c1c"/><ellipse cx="88" cy="-29" rx="1.6" ry=".6" fill="#ddd"/>
+      <path d="M70 -36 Q88 -40 106 -36" stroke="#fff" stroke-opacity=".18" stroke-width="2" fill="none"/>
+      <circle cx="176" cy="-30" r="7" fill="#9aa3ad"/><circle cx="176" cy="-30" r="3.5" fill="#d7dde3"/>
+      <path d="M176 -30 L150 -32 Q130 -33 118 -29" stroke="#d7dde3" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+      <rect x="112" y="-31.5" width="9" height="4" rx="1" fill="#c9cfd6"/>
+      <circle cx="188" cy="-31" r="4" fill="#5e666f"/>
+      <circle cx="34" cy="-12" r="2.6" fill="#c9cfd6"/><circle cx="44" cy="-12" r="2.6" fill="#c9cfd6"/>
+      <circle class="led" cx="190" cy="-12" r="2.2"/>`;
 const WZ_GRAM = `
       <ellipse cx="120" cy="584" rx="78" ry="9" fill="#000" opacity=".45"/>
       <rect x="62" y="534" width="116" height="46" rx="4" fill="url(#gWood)"/>
@@ -248,14 +274,16 @@ const WZ_GRAM = `
       <ellipse cx="60" cy="421" rx="41" ry="17" transform="rotate(-12 60 421)" fill="url(#gHornIn)"/>`;
 function wzModernScene(img, calendarSvg) {
   const R = wzRng(1612);
-  const pts = (n, fn) => { const out = []; for (let i = 0; i < 4000 && out.length < n; i++) { const p = fn(); if (p) out.push(p); } return out; };
-  const glow = (cls, [x, y], r, grad) => `<circle class="${cls}" cx="${f1(x)}" cy="${f1(y)}" r="${r}" fill="url(#${grad || 'gWarm'})" style="animation-delay:${(R() * 3).toFixed(2)}s;animation-duration:${(1.5 + R() * 2.5).toFixed(2)}s"/>`;
   const [ox1, oy1, ox2, oy2] = WZM.doorOuter, [ix1, iy1, ix2, iy2] = WZM.doorInner;
-  const tree = pts(80, () => { const x = 1095 + R() * 445, y = 60 + R() * 620; return wzInPoly(x, y, WZM.tree) ? [x, y] : null; });
-  const door = pts(70, () => { const x = ox1 + R() * (ox2 - ox1), y = oy1 + R() * (oy2 - oy1); return (x < ix1 + 6 || x > ix2 - 6 || y < iy1 + 6) ? [x, y] : null; });
   const [wx, wy, wr] = WZM.wreath;
-  const wreath = Array.from({ length: 22 }, (_, i) => { const a = (i / 22) * Math.PI * 2 + R() * 0.2, rr = wr * (0.62 + R() * 0.3); return [wx + Math.cos(a) * rr, wy + Math.sin(a) * rr * 0.98]; });
-  const rail = Array.from({ length: 26 }, (_, i) => [ix1 + 10 + i * ((ix2 - ix1 - 20) / 25), 540 + R() * 8]);
+  const parse = (str) => (str || '').split(';').filter(Boolean).map((p) => p.split(',').map(Number));
+  // one bulb: soft glow + bright core that pulse; every third bulb also goes dark for a moment
+  const bulb = (c, [x, y], i, grad) => {
+    const t = (1.4 + R() * 2.6).toFixed(2), d = (-R() * 6).toFixed(2), off = i % 3 === 0, t2 = (3.5 + R() * 4).toFixed(2);
+    return `<g class="bb ${c}${off ? ' bx' : ''}" style="--t:${off ? t2 : t}s;--d:${d}s">` +
+      (off ? `<circle class="bo" cx="${x}" cy="${y}" r="6" fill="url(#gOff)"/>` : '') +
+      `<circle class="bg" cx="${x}" cy="${y}" r="13" fill="url(#${grad || 'gWarm'})"/><circle class="bc" cx="${x}" cy="${y}" r="2.4" fill="#ffe6a0"/></g>`;
+  };
   const GC = ['#ff5252', '#ffd740', '#40c4ff', '#69f0ae', '#ff80ab'];
   const im = (extra) => `<use href="#wzImg" ${extra}/>`;
   const polyStr = WZM.tree.map((p) => p.join(',')).join(' ');
@@ -267,6 +295,8 @@ function wzModernScene(img, calendarSvg) {
       <linearGradient id="gWood" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a3a24"/><stop offset="1" stop-color="#3a2416"/></linearGradient>
       <linearGradient id="gBrass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6d986"/><stop offset=".45" stop-color="#c4923a"/><stop offset="1" stop-color="#6e4a12"/></linearGradient>
       <radialGradient id="gHornIn" cx=".5" cy=".6" r=".6"><stop offset="0" stop-color="#1c1006"/><stop offset=".7" stop-color="#5a3c12"/><stop offset="1" stop-color="#a87a2c"/></radialGradient>
+      <linearGradient id="gWalnut" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a5a34"/><stop offset=".5" stop-color="#6b4226"/><stop offset="1" stop-color="#4a2c18"/></linearGradient>
+      <radialGradient id="gOff"><stop offset="0" stop-color="#1c1208" stop-opacity=".95"/><stop offset=".55" stop-color="#1c1208" stop-opacity=".7"/><stop offset="1" stop-color="#1c1208" stop-opacity="0"/></radialGradient>
       <radialGradient id="gSpill"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
       <filter id="fDim" color-interpolation-filters="sRGB">
         <feColorMatrix type="saturate" values="0.72"/>
@@ -293,14 +323,14 @@ function wzModernScene(img, calendarSvg) {
     <g class="lit lit-tree">${im('mask="url(#mTree)"')}</g>
     </g>
     <rect x="0" y="640" width="1600" height="262" fill="url(#gFloorShade)"/>
-    <g transform="translate(768,107) scale(1.1)">
-      <g filter="url(#fDim)">${WZ_GRAM}</g>
-      <g class="lit lit-music">${WZ_GRAM}<ellipse class="hornglow" cx="60" cy="421" rx="38" ry="15" transform="rotate(-12 60 421)" fill="url(#gWarm)"/></g>
-      <text class="note" x="84" y="388" font-size="20" style="animation-delay:0s">♪</text>
-      <text class="note" x="112" y="366" font-size="26" style="animation-delay:.8s">♫</text>
-      <text class="note" x="138" y="392" font-size="18" style="animation-delay:1.6s">♪</text>
+    <g transform="translate(784,540)">
+      <g filter="url(#fDim)">${WZ_TURNTABLE}</g>
+      <g class="lit lit-music">${WZ_TURNTABLE}<ellipse cx="88" cy="-29" rx="80" ry="20" fill="url(#gWarm)" opacity=".35"/></g>
+      <text class="note" x="60" y="-62" font-size="26" style="animation-delay:0s">♪</text>
+      <text class="note" x="104" y="-86" font-size="32" style="animation-delay:.8s">♫</text>
+      <text class="note" x="146" y="-58" font-size="24" style="animation-delay:1.6s">♪</text>
     </g>
-    <g>${tree.map((p) => glow('tglow', p, 10)).join('')}${door.map((p) => glow('dglow', p, 9)).join('')}${wreath.map((p) => glow('kglow', p, 8)).join('')}${rail.map((p, i) => glow('gglow', p, 7, 'gL' + (i % GC.length))).join('')}</g>
+    <g class="bulbs">${parse(WZM.b_tree).map((p, i) => bulb('t', p, i)).join('')}${parse(WZM.b_door).map((p, i) => bulb('d', p, i)).join('')}${parse(WZM.b_wreath).map((p, i) => bulb('k', p, i)).join('')}${parse(WZM.b_garden).map((p, i) => bulb('g', p, i, 'gL' + (i % GC.length))).join('')}</g>
     <circle class="starglow" cx="1293" cy="72" r="70" fill="url(#gWarm)"/>
     <g transform="translate(${WZM.calendar[0]},${WZM.calendar[1]}) scale(1.72)">${calendarSvg}</g>
     <polygon class="hit" data-k="tree" points="${polyStr}"/>
@@ -308,7 +338,7 @@ function wzModernScene(img, calendarSvg) {
     <rect class="hit" data-k="garden" x="${ix1}" y="${iy1}" width="${ix2 - ix1}" height="${iy2 - iy1}"/>
     <circle class="hit" data-k="wreath" cx="${wx}" cy="${wy + 20}" r="${wr + 30}"/>
     ${WZM.candles.map(([x, y, rr]) => `<circle class="hit" data-k="candles" cx="${x}" cy="${y}" r="${rr}"/>`).join('')}
-    <rect class="hit" data-k="music" x="776" y="490" width="214" height="232"/>`;
+    <rect class="hit" data-k="music" x="776" y="490" width="236" height="232"/>`;
 }
 
 class ChristmasRoomCard extends HTMLElement {
@@ -803,7 +833,21 @@ class ChristmasRoomCard extends HTMLElement {
   .modern .lit { opacity:0; transition:opacity 1.1s ease; }
   .tree-on .lit-tree, .door-on .lit-door, .garden-on .lit-garden, .wreath-on .lit-wreath, .music-on .lit-music { opacity:1; }
   .candles-on .lit-candles { opacity:1; animation: cflick 2.1s ease-in-out infinite; }
-  .modern .tglow, .modern .dglow, .modern .kglow, .modern .gglow { mix-blend-mode:screen; }
+  .modern .lit { opacity:0; }
+  .modern.tree-on .lit-tree, .modern.door-on .lit-door, .modern.garden-on .lit-garden, .modern.wreath-on .lit-wreath { opacity:.78; }
+  .bb { opacity:0; transition:opacity .6s; }
+  .bb .bg { mix-blend-mode:screen; }
+  .tree-on .bb.t, .door-on .bb.d, .wreath-on .bb.k, .garden-on .bb.g { opacity:1; }
+  .tree-on .bb.t .bg, .door-on .bb.d .bg, .wreath-on .bb.k .bg, .garden-on .bb.g .bg { animation: bpulse var(--t) ease-in-out var(--d) infinite; }
+  .tree-on .bb.t.bx .bg, .door-on .bb.d.bx .bg, .wreath-on .bb.k.bx .bg, .garden-on .bb.g.bx .bg { animation: bgoff var(--t) linear var(--d) infinite; }
+  .bo { opacity:0; }
+  .tree-on .bb.t .bo, .door-on .bb.d .bo, .wreath-on .bb.k .bo, .garden-on .bb.g .bo { animation: boff var(--t) linear var(--d) infinite; }
+  @keyframes bpulse { 0%,100% { opacity:.12; } 50% { opacity:1; } }
+  .tree-on .bb.t .bc, .door-on .bb.d .bc, .wreath-on .bb.k .bc, .garden-on .bb.g .bc { animation: bpulse var(--t) ease-in-out var(--d) infinite; }
+  .tree-on .bb.bx .bc, .door-on .bb.bx .bc, .wreath-on .bb.bx .bc, .garden-on .bb.bx .bc { animation: bgoff var(--t) linear var(--d) infinite; }
+  @keyframes bgoff { 0%,64% { opacity:1; } 66%,86% { opacity:0; } 88%,100% { opacity:1; } }
+  @keyframes boff { 0%,64% { opacity:0; } 66%,86% { opacity:1; } 88%,100% { opacity:0; } }
+  .led { fill:#5a1010; } .music-on .led { fill:#4cff7a; }
   .tthumb { width:30px; height:30px; border-radius:7px; object-fit:cover; display:block; }
   .cal { cursor:default; }
   .cal .pg { transition: filter .8s; }
