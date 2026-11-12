@@ -101,6 +101,7 @@ schedule:                           # optional, see below
 | `height` | Card height. Default: full screen below the header. `auto` = fixed 5:3 aspect ratio (for normal dashboards). |
 | `show_chips` | Show the buttons at the bottom (default `true`). |
 | `tree`, `door`, `garden`, `wreath`, `candles`, `music` | One object each, see below. |
+| `sideboard` | Modern style: indirect LED light under the sideboard. With an `entity` it gets its own button and takes the light's colour (`rgb_color`); without one it simply follows the tree. |
 | `schedule` | Helpers for the schedule panel, see below. |
 
 **Per object** (`tree`, `door`, `garden`, `wreath`, `candles`, `music`):
@@ -144,7 +145,7 @@ Ein gemütliches, animiertes Weihnachts-Wohnzimmer fürs Dashboard. Jedes Objekt
 
 ![Deutsch](images/room_de.jpg)
 
-**Stil:** `style: classic` (gezeichnet, Standard) oder `style: modern` (Foto – jedes eingeschaltete Objekt leuchtet in seinem Bereich auf, alles andere bleibt gedimmt).
+**Stil:** `style: classic` (gezeichnet, Standard) oder `style: modern` (Foto – jedes eingeschaltete Objekt leuchtet in seinem Bereich auf, die Lichterketten blinken, alles andere bleibt gedimmt; Musik kommt aus dem Smart-Radio neben dem Sessel). Optional `sideboard: { entity: light.… }` für die indirekte Beleuchtung unter dem Sideboard – übernimmt die Farbe des Lichts.
 
 **Installation:** *Einstellungen → Marketplace → Add from link* → `https://github.com/Severinius-MUC/christmas-room-card` (oder manuell wie oben beschrieben). Danach am besten eine Ansicht vom Typ **Panel** anlegen und die Karte „Christmas Room Card“ hinzufügen – alles Weitere im grafischen Editor.
 

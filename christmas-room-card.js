@@ -8,7 +8,7 @@ const WZ_VERSION = '1.2.0';
 const WZ_I18N = {
   de: {
     title: 'Frohe Weihnachten', on: 'an', off: 'aus',
-    items: { tree: 'Baum', door: 'Balkontür', garden: 'Garten', wreath: 'Kranz', candles: 'Duftkerzen', music: 'Musik' },
+    items: { tree: 'Baum', door: 'Balkontür', garden: 'Garten', wreath: 'Kranz', candles: 'Duftkerzen', music: 'Musik', sideboard: 'Indirektes Licht' },
     music: 'Musik', musicTitle: 'Weihnachtsmusik', playPause: 'Abspielen / Pause', pause: '⏸ Pause', play: '▶ Abspielen',
     random: 'Zufall', randomSub: 'jedes Mal eine andere Playlist',
     scent: 'Duft', scentToggle: 'Duft an/aus', scentTitle: 'Weihnachtsduft', intensity: 'Intensität', timer: 'Timer',
@@ -23,7 +23,7 @@ const WZ_I18N = {
     months: ['JANUAR', 'FEBRUAR', 'MÄRZ', 'APRIL', 'MAI', 'JUNI', 'JULI', 'AUGUST', 'SEPTEMBER', 'OKTOBER', 'NOVEMBER', 'DEZEMBER'],
     calDays: 'Tage bis', calDay: 'Tag bis', calToday: 'Heute ist', calMerry: 'Frohe', calEve: 'Heiligabend', calXmas: 'Weihnachten',
     ed: {
-      titles: { tree: 'Weihnachtsbaum', door: 'Balkontür-Girlande', garden: 'Garten (Lichter im Fenster)', wreath: 'Kranz an der Wand', candles: 'Duftkerzen', music: 'Musik', schedule: 'Zeitplan (Start / Alles aus)' },
+      titles: { tree: 'Weihnachtsbaum', door: 'Balkontür-Girlande', garden: 'Garten (Lichter im Fenster)', wreath: 'Kranz an der Wand', candles: 'Duftkerzen', music: 'Musik', sideboard: 'Indirektes Licht (unter dem Sideboard, Stil modern)', schedule: 'Zeitplan (Start / Alles aus)' },
       fit: [['auto', 'Automatisch'], ['cover', 'Füllend (Ränder beschneiden)'], ['contain', 'Ganz anzeigen']],
       styles: [['classic', 'Klassisch (gezeichnet)'], ['modern', 'Modern (Foto)']],
       labels: {
@@ -41,7 +41,7 @@ const WZ_I18N = {
   },
   en: {
     title: 'Merry Christmas', on: 'on', off: 'off',
-    items: { tree: 'Tree', door: 'Balcony door', garden: 'Garden', wreath: 'Wreath', candles: 'Scent candles', music: 'Music' },
+    items: { tree: 'Tree', door: 'Balcony door', garden: 'Garden', wreath: 'Wreath', candles: 'Scent candles', music: 'Music', sideboard: 'Ambient light' },
     music: 'Music', musicTitle: 'Christmas music', playPause: 'Play / Pause', pause: '⏸ Pause', play: '▶ Play',
     random: 'Shuffle', randomSub: 'a different playlist every time',
     scent: 'Scent', scentToggle: 'Scent on/off', scentTitle: 'Christmas scent', intensity: 'Intensity', timer: 'Timer',
@@ -56,7 +56,7 @@ const WZ_I18N = {
     months: ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'],
     calDays: 'days until', calDay: 'day until', calToday: 'Today is', calMerry: 'Merry', calEve: 'Christmas Eve', calXmas: 'Christmas',
     ed: {
-      titles: { tree: 'Christmas tree', door: 'Balcony door garland', garden: 'Garden (lights in the window)', wreath: 'Wreath on the wall', candles: 'Scent candles', music: 'Music', schedule: 'Schedule (start / all off)' },
+      titles: { tree: 'Christmas tree', door: 'Balcony door garland', garden: 'Garden (lights in the window)', wreath: 'Wreath on the wall', candles: 'Scent candles', music: 'Music', sideboard: 'Ambient light (under the sideboard, modern style)', schedule: 'Schedule (start / all off)' },
       fit: [['auto', 'Automatic'], ['cover', 'Fill (crop edges)'], ['contain', 'Show everything']],
       styles: [['classic', 'Classic (illustrated)'], ['modern', 'Modern (photo)']],
       labels: {
@@ -80,7 +80,7 @@ const wzLang = (cfg, hass) => {
 let WZ_T = WZ_I18N[wzLang(null, null)];
 const WZ_OFF = ['off', 'unavailable', 'unknown', 'idle', 'paused', 'standby', 'none', '', 'closed'];
 const WZ_ITEMS = [
-  ['tree', '🎄'], ['door', '✨'], ['garden', '🌟'], ['wreath', '💫'], ['candles', '🕯️'], ['music', '🎵']
+  ['tree', '🎄'], ['door', '✨'], ['garden', '🌟'], ['wreath', '💫'], ['candles', '🕯️'], ['music', '🎵'], ['sideboard', '💡']
 ];
 
 const WZ_RND = '__random__';
@@ -222,7 +222,7 @@ function wzBow(x, y, s) {
 const WZM = {
   tree: [[1293, 28], [1332, 100], [1365, 185], [1412, 300], [1470, 430], [1520, 560], [1538, 625], [1440, 692], [1160, 692], [1092, 625], [1118, 520], [1170, 400], [1222, 262], [1258, 140]],
   doorOuter: [205, 86, 722, 670], doorInner: [258, 178, 680, 640],
-  wreath: [927, 268, 92], candles: [[896, 462, 92], [138, 622, 78]], calendar: [1036, 84],
+  wreath: [927, 268, 92], candles: [[896, 462, 92], [110, 618, 40]], calendar: [1036, 84],
   // light bulbs detected in the bundled photo (x,y;x,y…) – they blink individually
   b_tree: '1423,392;1402,518;1366,239;1378,335;1461,572;1321,316;1175,632;1252,204;1313,573;1328,416;1172,486;1141,636;1228,329;1315,240;1242,521;1247,397;1248,217;1303,503;1389,350;1404,381;1283,506;1483,581;1201,594;1389,604;1417,529;1336,644;1385,454;1433,476;1330,200;1199,384;1461,639;1317,561;1329,577;1359,404;1218,318;1492,636;1204,483;1389,294;1220,666;1255,280;1332,191;1360,327;1272,444;1266,179;1177,554;1376,606;1324,157;1296,242;1188,600;1229,278;1190,377;1288,497;1266,597;1238,604;1255,612;1261,320;1261,380;1301,394;1215,469;1355,380;1364,518;1448,547;1261,190;1245,269;1276,432;1458,653;1362,462;1471,652;1291,177;1219,481;1317,167;1208,383;1493,628;1303,580;1473,589;1191,461;1260,539;1368,597;1223,599;1251,196;1278,230;1319,373;1398,465;1191,583;1296,60;1363,261;1392,521;1450,579;1438,586;1162,589;1287,589;1154,596;1207,317;1348,491;1149,587;1175,664;1236,662;1284,182;1196,441;1480,549;1290,643;1305,67;1285,250;1305,373;1207,472;1446,486;1344,270;1239,281;1215,307;1277,324;1444,439;1246,457;1362,476;1185,517;1200,523;1337,587;1263,166;1242,234;1329,406;1263,452;1397,541;1415,636;1268,168;1310,200;1385,397;1378,400;1376,477;1425,494;1320,508;1273,511;1359,561;1212,600;1264,632;1250,231;1349,249;1232,316;1292,317;1241,323;1231,386;1396,391;1433,410;1350,416;1288,430;1164,494;1233,494;1227,525;1229,562;1411,618;1174,660;1357,223;1356,275;1269,289;1380,297;1239,330;1222,391;1264,400;1415,469;1168,474;1168,542;1167,594;1320,207;1337,316;1271,322;1235,395;1319,411;1228,462;1245,511;1358,512;1205,551;1359,556',
   b_door: '215,381;658,162;288,162;686,429;714,308;360,116;257,428;243,353;272,148;687,505;685,241;263,117;308,138;259,162;701,284;231,137;686,157;658,176;239,385;229,228;530,162;689,204;696,476;571,126;231,347;534,147;515,133;703,160;715,281;250,294;226,314;239,458;680,585;695,622;243,426;655,115;600,135;666,142;252,260;704,372;695,463;243,205;694,347;698,416;326,125;634,127;691,302;297,113;554,127;245,150;234,180;237,278;237,298;245,451;679,523;422,142;626,144;406,153;586,152;244,183;213,226;214,263;690,270;321,120;251,336;256,128;398,129;698,182;240,403;345,147;383,151;243,256;232,263;684,299;245,334;223,377;627,162;692,182;371,131;708,131;225,167;705,323;240,118;402,140;690,140;212,205;234,278;249,456;686,578;249,288;692,566;604,114;606,162;692,339;251,468;675,119;269,136;643,139;255,194;250,204;709,329;695,377;223,384;702,501;298,150;637,152;260,158;284,158;628,159;221,172;697,177;231,209;700,240;229,248;257,290;256,363;703,454;681,460;577,117;280,121;548,162;213,253;689,323;227,381;686,521',
@@ -237,27 +237,19 @@ function wzInPoly(x, y, poly) {
   }
   return inside;
 }
-const WZ_TURNTABLE = `
-      <ellipse cx="110" cy="172" rx="118" ry="9" fill="#000" opacity=".45"/>
-      <path d="M18 14 L30 170 M30 170 L42 14 M178 14 L190 170 M190 170 L202 14" stroke="#141414" stroke-width="3.2" fill="none" stroke-linecap="round"/>
-      <rect x="10" y="96" width="200" height="7" rx="2" fill="#6b4529"/>
-      <g>${['#b71c1c', '#e8e1d4', '#1d4d2f', '#c9a24a', '#2b3b5c', '#8e1b1b', '#d9c9a8', '#1b1b1b'].map((c, i) => `<rect x="${22 + i * 22}" y="${46 - (i % 3) * 3}" width="19" height="${50 + (i % 3) * 3}" rx="1.5" fill="${c}"/>`).join('')}</g>
-      <rect x="0" y="0" width="220" height="15" rx="3" fill="url(#gWalnut)"/>
-      <rect x="0" y="0" width="220" height="3" rx="1.5" fill="#d8a46a" opacity=".55"/>
-      <rect x="18" y="-24" width="184" height="24" rx="4" fill="url(#gWalnut)"/>
-      <rect x="18" y="-24" width="184" height="4" rx="2" fill="#e2b27a" opacity=".5"/>
-      <rect x="22" y="-6" width="176" height="5" rx="2" fill="#1a1a1a" opacity=".55"/>
-      <ellipse cx="88" cy="-27" rx="66" ry="11" fill="#2a2a2a"/>
-      <ellipse cx="88" cy="-29" rx="62" ry="10" fill="#0e0e0e"/>
-      <ellipse cx="88" cy="-29" rx="50" ry="8" fill="none" stroke="#2c2c2c"/><ellipse cx="88" cy="-29" rx="38" ry="6.2" fill="none" stroke="#262626"/>
-      <ellipse cx="88" cy="-29" rx="14" ry="2.6" fill="#b71c1c"/><ellipse cx="88" cy="-29" rx="1.6" ry=".6" fill="#ddd"/>
-      <path d="M70 -36 Q88 -40 106 -36" stroke="#fff" stroke-opacity=".18" stroke-width="2" fill="none"/>
-      <circle cx="176" cy="-30" r="7" fill="#9aa3ad"/><circle cx="176" cy="-30" r="3.5" fill="#d7dde3"/>
-      <path d="M176 -30 L150 -32 Q130 -33 118 -29" stroke="#d7dde3" stroke-width="2.6" fill="none" stroke-linecap="round"/>
-      <rect x="112" y="-31.5" width="9" height="4" rx="1" fill="#c9cfd6"/>
-      <circle cx="188" cy="-31" r="4" fill="#5e666f"/>
-      <circle cx="34" cy="-12" r="2.6" fill="#c9cfd6"/><circle cx="44" cy="-12" r="2.6" fill="#c9cfd6"/>
-      <circle class="led" cx="190" cy="-12" r="2.2"/>`;
+const WZ_RADIO = `
+      <ellipse cx="42" cy="1.5" rx="48" ry="4.5" fill="#000" opacity=".55"/>
+      <path d="M3 -47 L10 -53 H86 L79 -47 Z" fill="#8a5a34"/>
+      <path d="M79 -47 L86 -53 V-6 L79 0 Z" fill="#3e2414"/>
+      <rect x="0" y="-48" width="80" height="48" rx="5" fill="url(#gWalnut)"/>
+      <rect x="0" y="-48" width="80" height="2" rx="1" fill="#e2b27a" opacity=".5"/>
+      <rect x="4" y="-43" width="45" height="39" rx="3.5" fill="url(#pGrille)"/>
+      <rect x="4" y="-43" width="45" height="39" rx="3.5" fill="none" stroke="#000" stroke-opacity=".35"/>
+      <rect x="53" y="-42" width="23" height="15" rx="2.5" fill="#0c0c0d" stroke="#3a3a3c" stroke-width=".8"/>
+      <circle cx="64.5" cy="-15" r="7.2" fill="#2a2a2c" stroke="#9aa0a6" stroke-width="1.3"/>
+      <circle cx="64.5" cy="-15" r="4.6" fill="#38383b"/>
+      <rect x="64" y="-21" width="1" height="3.4" rx=".5" fill="#c9cfd6"/>
+      <circle class="led" cx="76" cy="-4.5" r="1.3"/>`;
 const WZ_GRAM = `
       <ellipse cx="120" cy="584" rx="78" ry="9" fill="#000" opacity=".45"/>
       <rect x="62" y="534" width="116" height="46" rx="4" fill="url(#gWood)"/>
@@ -272,7 +264,7 @@ const WZ_GRAM = `
       <path d="M78 532 C76 482 40 456 15 430 L105 411 C80 452 90 492 90 532 Z" fill="url(#gBrass)"/>
       <ellipse cx="60" cy="420" rx="46" ry="21" transform="rotate(-12 60 420)" fill="url(#gBrass)"/>
       <ellipse cx="60" cy="421" rx="41" ry="17" transform="rotate(-12 60 421)" fill="url(#gHornIn)"/>`;
-function wzModernScene(img, calendarSvg) {
+function wzModernScene(img, calendarSvg, sbHit) {
   const R = wzRng(1612);
   const [ox1, oy1, ox2, oy2] = WZM.doorOuter, [ix1, iy1, ix2, iy2] = WZM.doorInner;
   const [wx, wy, wr] = WZM.wreath;
@@ -297,12 +289,18 @@ function wzModernScene(img, calendarSvg) {
       <radialGradient id="gHornIn" cx=".5" cy=".6" r=".6"><stop offset="0" stop-color="#1c1006"/><stop offset=".7" stop-color="#5a3c12"/><stop offset="1" stop-color="#a87a2c"/></radialGradient>
       <linearGradient id="gWalnut" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a5a34"/><stop offset=".5" stop-color="#6b4226"/><stop offset="1" stop-color="#4a2c18"/></linearGradient>
       <radialGradient id="gOff"><stop offset="0" stop-color="#1c1208" stop-opacity=".95"/><stop offset=".55" stop-color="#1c1208" stop-opacity=".7"/><stop offset="1" stop-color="#1c1208" stop-opacity="0"/></radialGradient>
+      <clipPath id="cSb"><path d="M800 630 H1070 V700 H800 Z"/></clipPath>
+      <pattern id="pGrille" width="3.2" height="3.2" patternUnits="userSpaceOnUse"><rect width="3.2" height="3.2" fill="#2b2b2e"/><circle cx="1.6" cy="1.6" r=".75" fill="#151517"/></pattern>
+      <linearGradient id="gSbWash" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--sb,#ffb04a)" stop-opacity=".95"/><stop offset=".3" style="stop-color:var(--sb,#ffb04a)" stop-opacity=".3"/><stop offset="1" style="stop-color:var(--sb,#ffb04a)" stop-opacity="0"/></linearGradient>
+      <radialGradient id="gSbFloor"><stop offset="0" style="stop-color:var(--sb,#ffb04a)" stop-opacity=".55"/><stop offset="1" style="stop-color:var(--sb,#ffb04a)" stop-opacity="0"/></radialGradient>
       <radialGradient id="gSpill"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
       <filter id="fDim" color-interpolation-filters="sRGB">
         <feColorMatrix type="saturate" values="0.72"/>
         <feComponentTransfer><feFuncR type="table" tableValues="0 0.09 0.16 0.21 0.245 0.27"/><feFuncG type="table" tableValues="0 0.08 0.145 0.19 0.22 0.24"/><feFuncB type="table" tableValues="0 0.08 0.13 0.165 0.19 0.205"/></feComponentTransfer>
       </filter>
       <filter id="fSoft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="14"/></filter>
+      <filter id="fGlow4" x="-10%" y="-60%" width="120%" height="220%"><feGaussianBlur stdDeviation="5"/></filter>
+      <filter id="fGlow1" x="-5%" y="-300%" width="110%" height="700%"><feGaussianBlur stdDeviation="1.4"/></filter>
       <filter id="fBg" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="9"/><feComponentTransfer><feFuncR type="linear" slope=".3"/><feFuncG type="linear" slope=".28"/><feFuncB type="linear" slope=".26"/></feComponentTransfer></filter>
       <filter id="fEdge" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="22"/></filter>
       <mask id="mEdge" maskUnits="userSpaceOnUse" x="-100" y="-100" width="1800" height="1100"><rect x="36" y="36" width="1528" height="828" fill="#fff" filter="url(#fEdge)"/></mask>
@@ -323,12 +321,26 @@ function wzModernScene(img, calendarSvg) {
     <g class="lit lit-tree">${im('mask="url(#mTree)"')}</g>
     </g>
     <rect x="0" y="640" width="1600" height="262" fill="url(#gFloorShade)"/>
-    <g transform="translate(350,630) scale(.82)">
-      <g filter="url(#fDim)">${WZ_TURNTABLE}</g>
-      <g class="lit lit-music">${WZ_TURNTABLE}<ellipse cx="88" cy="-29" rx="80" ry="20" fill="url(#gWarm)" opacity=".35"/></g>
-      <text class="note" x="60" y="-62" font-size="26" style="animation-delay:0s">♪</text>
-      <text class="note" x="104" y="-86" font-size="32" style="animation-delay:.8s">♫</text>
-      <text class="note" x="146" y="-58" font-size="24" style="animation-delay:1.6s">♪</text>
+    <g class="sb-light">
+      <g clip-path="url(#cSb)">
+        <rect x="812" y="632" width="310" height="30" fill="url(#gSbWash)" filter="url(#fGlow4)" opacity=".85"/>
+        <rect x="816" y="626" width="304" height="12" rx="6" style="fill:var(--sb,#ffb04a)" opacity=".55" filter="url(#fGlow4)"/>
+        <ellipse cx="945" cy="664" rx="175" ry="16" fill="url(#gSbFloor)" opacity=".9"/>
+      </g>
+      <rect x="818" y="630.6" width="300" height="2.2" rx="1.1" style="fill:var(--sb,#ffb04a)" filter="url(#fGlow1)"/>
+      <rect x="822" y="631" width="292" height="1.2" rx=".6" fill="#fff4dc" opacity=".8"/>
+    </g>
+    <g transform="translate(131,657)">
+      <g filter="url(#fDim)">${WZ_RADIO}</g>
+      <g class="lit lit-candles">${WZ_RADIO}</g>
+      <g class="rdisp">
+        <rect x="54" y="-41" width="21" height="13" rx="2" fill="#ffb84d" opacity=".08"/>
+        ${[0, 1, 2, 3, 4, 5].map((i) => `<rect class="eqb" x="${56 + i * 3}" y="-38" width="2" height="8" rx=".5" fill="#ffc46b" style="animation-delay:-${(i * 0.37).toFixed(2)}s"/>`).join('')}
+        <ellipse class="dglow" cx="64.5" cy="-34.5" rx="18" ry="11" fill="url(#gWarm)"/>
+      </g>
+      <text class="note" x="18" y="-62" font-size="18" style="animation-delay:0s">♪</text>
+      <text class="note" x="40" y="-78" font-size="22" style="animation-delay:.8s">♫</text>
+      <text class="note" x="62" y="-60" font-size="16" style="animation-delay:1.6s">♪</text>
     </g>
     <g class="bulbs">${parse(WZM.b_tree).map((p, i) => bulb('t', p, i)).join('')}${parse(WZM.b_door).map((p, i) => bulb('d', p, i)).join('')}${parse(WZM.b_wreath).map((p, i) => bulb('k', p, i)).join('')}${parse(WZM.b_garden).map((p, i) => bulb('g', p, i, 'gL' + (i % GC.length))).join('')}</g>
     <circle class="starglow" cx="1293" cy="72" r="70" fill="url(#gWarm)"/>
@@ -336,9 +348,10 @@ function wzModernScene(img, calendarSvg) {
     <polygon class="hit" data-k="tree" points="${polyStr}"/>
     <path class="hit" data-k="door" d="M${ox1} ${oy1}H${ox2}V${oy2}H${ox1}Z M${ix1} ${iy1}V${iy2}H${ix2}V${iy1}Z" fill-rule="evenodd"/>
     <rect class="hit" data-k="garden" x="${ix1}" y="${iy1}" width="${ix2 - ix1}" height="${iy2 - iy1}"/>
+    ${sbHit ? '<rect class="hit" data-k="sideboard" x="806" y="556" width="322" height="120"/>' : ''}
     <circle class="hit" data-k="wreath" cx="${wx}" cy="${wy + 20}" r="${wr + 30}"/>
     ${WZM.candles.map(([x, y, rr]) => `<circle class="hit" data-k="candles" cx="${x}" cy="${y}" r="${rr}"/>`).join('')}
-    <rect class="hit" data-k="music" x="342" y="560" width="196" height="210"/>`;
+    <rect class="hit" data-k="music" x="126" y="596" width="96" height="70"/>`;
 }
 
 class ChristmasRoomCard extends HTMLElement {
@@ -404,6 +417,8 @@ class ChristmasRoomCard extends HTMLElement {
     return !WZ_OFF.includes(String(st.state).toLowerCase());
   }
   _isOn(k) {
+    const sb = this._config.sideboard || {};
+    if (k === 'sideboard' && !sb.entity && !sb.action) return this._isOn('tree'); // decoration follows the tree
     const o = this._opt[k];
     if (o && Date.now() < o.until) return o.val;
     const a = this._actual(k);
@@ -449,6 +464,10 @@ class ChristmasRoomCard extends HTMLElement {
       const chip = this.shadowRoot.getElementById('chip-' + k);
       if (chip) { chip.classList.toggle('on', on); chip.querySelector('.st').textContent = on ? WZ_T.on : WZ_T.off; }
     });
+    const sbe = (this._config.sideboard || {}).entity, sbs = sbe && this._hass && this._hass.states[sbe];
+    const rgb = sbs && sbs.attributes && sbs.attributes.rgb_color;
+    if (Array.isArray(rgb) && rgb.length === 3) root.style.setProperty('--sb', `rgb(${rgb.map((v) => Math.round(60 + v * 0.77)).join(',')})`);
+    else root.style.removeProperty('--sb');
     this._dock();
   }
   // ---------- Music ----------
@@ -700,7 +719,7 @@ class ChristmasRoomCard extends HTMLElement {
   _render() {
     if (!this.shadowRoot) this.attachShadow({ mode: 'open' });
     const cfg = this._config;
-    const key = JSON.stringify([cfg.title, cfg.show_chips, cfg.height, WZ_ITEMS.map(([k]) => (cfg[k] || {}).name), new Date().toDateString(), WZ_T.title, cfg.style, cfg.background_image]);
+    const key = JSON.stringify([cfg.title, cfg.show_chips, cfg.height, WZ_ITEMS.map(([k]) => (cfg[k] || {}).name), new Date().toDateString(), WZ_T.title, cfg.style, cfg.background_image, !!(cfg.sideboard && (cfg.sideboard.entity || cfg.sideboard.action))]);
     if (this._key === key && this.shadowRoot.getElementById('room')) { this._fit(); this._apply(); return; }
     this._key = key;
     const cfgH = cfg.height || 'calc(100vh - var(--header-height, 56px))';
@@ -848,6 +867,13 @@ class ChristmasRoomCard extends HTMLElement {
   @keyframes bgoff { 0%,64% { opacity:1; } 66%,86% { opacity:0; } 88%,100% { opacity:1; } }
   @keyframes boff { 0%,64% { opacity:0; } 66%,86% { opacity:1; } 88%,100% { opacity:0; } }
   .led { fill:#5a1010; } .music-on .led { fill:#4cff7a; }
+  .sb-light { opacity:0; transition:opacity 1.2s ease; mix-blend-mode:screen; pointer-events:none; }
+  .sideboard-on .sb-light { opacity:1; }
+  .rdisp .eqb { opacity:.18; transform-box:fill-box; transform-origin:50% 100%; transform:scaleY(.25); }
+  .rdisp .dglow { opacity:0; mix-blend-mode:screen; transition:opacity .8s; }
+  .music-on .rdisp .eqb { opacity:1; animation: eqb .9s ease-in-out infinite alternate; }
+  .music-on .rdisp .dglow { opacity:.45; }
+  @keyframes eqb { 0% { transform:scaleY(.2); } 50% { transform:scaleY(.9); } 100% { transform:scaleY(.45); } }
   .tthumb { width:30px; height:30px; border-radius:7px; object-fit:cover; display:block; }
   .cal { cursor:default; }
   .cal .pg { transition: filter .8s; }
@@ -917,7 +943,7 @@ class ChristmasRoomCard extends HTMLElement {
 </style>
 <ha-card>
   <div class="head"><h2>${wzEsc(this._config.title || WZ_T.title)}</h2><button class="gear" id="gear" data-pop="settings" title="${WZ_T.schedule}" style="display:none">⚙️</button></div>
-  ${this._modern ? `<svg id="room" class="modern" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Christmas living room">${wzModernScene(modernImg, calendarSvg)}</svg>` : `<svg id="room" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Christmas living room">
+  ${this._modern ? `<svg id="room" class="modern" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Christmas living room">${wzModernScene(modernImg, calendarSvg, !!(cfg.sideboard && (cfg.sideboard.entity || cfg.sideboard.action)))}</svg>` : `<svg id="room" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Christmas living room">
     <defs>
       <radialGradient id="gWarm"><stop offset="0" stop-color="#fff6d6" stop-opacity="1"/><stop offset=".25" stop-color="#ffd27a" stop-opacity=".75"/><stop offset="1" stop-color="#ffb347" stop-opacity="0"/></radialGradient>
       ${GC.map((c, i) => `<radialGradient id="gL${i}"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".3" stop-color="${c}" stop-opacity=".8"/><stop offset="1" stop-color="${c}" stop-opacity="0"/></radialGradient>`).join('')}
@@ -1083,7 +1109,7 @@ class ChristmasRoomCard extends HTMLElement {
   <div class="pop" id="pop"></div>
   <div class="chips" id="chipsbar">
     <div class="dock" id="dock"></div>
-    ${WZ_ITEMS.map(([k, icon]) => `<button class="chip" id="chip-${k}" data-k="${k}"><span>${icon}</span><span>${wzEsc((cfg[k] && cfg[k].name) || WZ_T.items[k])}</span><span class="st">${WZ_T.off}</span></button>`).join('')}
+    ${WZ_ITEMS.filter(([k]) => k !== 'sideboard' || (cfg.sideboard && (cfg.sideboard.entity || cfg.sideboard.action))).map(([k, icon]) => `<button class="chip" id="chip-${k}" data-k="${k}"><span>${icon}</span><span>${wzEsc((cfg[k] && cfg[k].name) || WZ_T.items[k])}</span><span class="st">${WZ_T.off}</span></button>`).join('')}
   </div>
 </ha-card>`;
     this.shadowRoot.querySelectorAll('[data-k]').forEach((el) => el.addEventListener('click', (e) => {
@@ -1150,6 +1176,7 @@ function wzEditorSchema(hass, cfg) {
     item('door', 'mdi:door-sliding'),
     item('garden', 'mdi:pine-tree-variant'),
     item('wreath', 'mdi:circle-double'),
+    item('sideboard', 'mdi:led-strip-variant'),
     item('candles', 'mdi:candle', [
       { name: 'pura_device', selector: { device: { filter: [{ integration: 'pura' }] } } },
       { name: 'controls', selector: { boolean: {} } },
