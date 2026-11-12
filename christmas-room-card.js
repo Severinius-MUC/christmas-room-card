@@ -323,7 +323,7 @@ function wzModernScene(img, calendarSvg) {
     <g class="lit lit-tree">${im('mask="url(#mTree)"')}</g>
     </g>
     <rect x="0" y="640" width="1600" height="262" fill="url(#gFloorShade)"/>
-    <g transform="translate(784,540)">
+    <g transform="translate(350,630) scale(.82)">
       <g filter="url(#fDim)">${WZ_TURNTABLE}</g>
       <g class="lit lit-music">${WZ_TURNTABLE}<ellipse cx="88" cy="-29" rx="80" ry="20" fill="url(#gWarm)" opacity=".35"/></g>
       <text class="note" x="60" y="-62" font-size="26" style="animation-delay:0s">♪</text>
@@ -338,7 +338,7 @@ function wzModernScene(img, calendarSvg) {
     <rect class="hit" data-k="garden" x="${ix1}" y="${iy1}" width="${ix2 - ix1}" height="${iy2 - iy1}"/>
     <circle class="hit" data-k="wreath" cx="${wx}" cy="${wy + 20}" r="${wr + 30}"/>
     ${WZM.candles.map(([x, y, rr]) => `<circle class="hit" data-k="candles" cx="${x}" cy="${y}" r="${rr}"/>`).join('')}
-    <rect class="hit" data-k="music" x="776" y="490" width="236" height="232"/>`;
+    <rect class="hit" data-k="music" x="342" y="560" width="196" height="210"/>`;
 }
 
 class ChristmasRoomCard extends HTMLElement {
