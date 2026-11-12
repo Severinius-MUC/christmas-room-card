@@ -29,6 +29,11 @@ Every object in the room is tappable and runs a real action in your home.
 
 ### Marketplace / HACS (custom repository)
 
+[![Open in the Marketplace](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Severinius-MUC&repository=christmas-room-card&category=plugin)
+
+One click opens the card in your Home Assistant (Marketplace from 2026.11, HACS before) – or add it manually:
+
+
 1. Open **Settings → Marketplace** (HACS on Home Assistant 2026.10 and older).
 2. Choose **Add from link** (HACS: ⋮ → *Custom repositories*, category *Dashboard*) and enter
    `https://github.com/Severinius-MUC/christmas-room-card`
