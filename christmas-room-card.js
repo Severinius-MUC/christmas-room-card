@@ -232,6 +232,20 @@ function wzInPoly(x, y, poly) {
   }
   return inside;
 }
+const WZ_GRAM = `
+      <ellipse cx="120" cy="584" rx="78" ry="9" fill="#000" opacity=".45"/>
+      <rect x="62" y="534" width="116" height="46" rx="4" fill="url(#gWood)"/>
+      <rect x="62" y="534" width="116" height="6" fill="#7a5233"/>
+      <rect x="72" y="546" width="96" height="26" rx="3" fill="none" stroke="#c9a24a" stroke-opacity=".45"/>
+      <rect x="110" y="553" width="20" height="10" rx="2" fill="#ffcf6b"/>
+      <path d="M178 556 h12 v-12" stroke="#8a6d3b" stroke-width="3" fill="none"/><circle cx="190" cy="543" r="3.5" fill="#3b2414"/>
+      <ellipse cx="124" cy="533" rx="46" ry="8" fill="#121212"/>
+      <ellipse cx="124" cy="533" rx="36" ry="6" fill="none" stroke="#333"/><ellipse cx="124" cy="533" rx="26" ry="4.4" fill="none" stroke="#2a2a2a"/>
+      <ellipse cx="124" cy="533" rx="9" ry="1.8" fill="#b71c1c"/>
+      <path d="M90 530 L115 523 L134 531" stroke="#c9a24a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M78 532 C76 482 40 456 15 430 L105 411 C80 452 90 492 90 532 Z" fill="url(#gBrass)"/>
+      <ellipse cx="60" cy="420" rx="46" ry="21" transform="rotate(-12 60 420)" fill="url(#gBrass)"/>
+      <ellipse cx="60" cy="421" rx="41" ry="17" transform="rotate(-12 60 421)" fill="url(#gHornIn)"/>`;
 function wzModernScene(img, calendarSvg) {
   const R = wzRng(1612);
   const pts = (n, fn) => { const out = []; for (let i = 0; i < 4000 && out.length < n; i++) { const p = fn(); if (p) out.push(p); } return out; };
@@ -250,6 +264,9 @@ function wzModernScene(img, calendarSvg) {
       <image id="wzImg" href="${wzEsc(img)}" x="0" y="0" width="1600" height="900" preserveAspectRatio="none"/>
       <radialGradient id="gWarm"><stop offset="0" stop-color="#fff6d6" stop-opacity="1"/><stop offset=".25" stop-color="#ffd27a" stop-opacity=".75"/><stop offset="1" stop-color="#ffb347" stop-opacity="0"/></radialGradient>
       ${GC.map((c, i) => `<radialGradient id="gL${i}"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".3" stop-color="${c}" stop-opacity=".8"/><stop offset="1" stop-color="${c}" stop-opacity="0"/></radialGradient>`).join('')}
+      <linearGradient id="gWood" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a3a24"/><stop offset="1" stop-color="#3a2416"/></linearGradient>
+      <linearGradient id="gBrass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6d986"/><stop offset=".45" stop-color="#c4923a"/><stop offset="1" stop-color="#6e4a12"/></linearGradient>
+      <radialGradient id="gHornIn" cx=".5" cy=".6" r=".6"><stop offset="0" stop-color="#1c1006"/><stop offset=".7" stop-color="#5a3c12"/><stop offset="1" stop-color="#a87a2c"/></radialGradient>
       <radialGradient id="gSpill"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
       <filter id="fDim" color-interpolation-filters="sRGB">
         <feColorMatrix type="saturate" values="0.72"/>
@@ -276,6 +293,13 @@ function wzModernScene(img, calendarSvg) {
     <g class="lit lit-tree">${im('mask="url(#mTree)"')}</g>
     </g>
     <rect x="0" y="640" width="1600" height="262" fill="url(#gFloorShade)"/>
+    <g transform="translate(768,107) scale(1.1)">
+      <g filter="url(#fDim)">${WZ_GRAM}</g>
+      <g class="lit lit-music">${WZ_GRAM}<ellipse class="hornglow" cx="60" cy="421" rx="38" ry="15" transform="rotate(-12 60 421)" fill="url(#gWarm)"/></g>
+      <text class="note" x="84" y="388" font-size="20" style="animation-delay:0s">♪</text>
+      <text class="note" x="112" y="366" font-size="26" style="animation-delay:.8s">♫</text>
+      <text class="note" x="138" y="392" font-size="18" style="animation-delay:1.6s">♪</text>
+    </g>
     <g>${tree.map((p) => glow('tglow', p, 10)).join('')}${door.map((p) => glow('dglow', p, 9)).join('')}${wreath.map((p) => glow('kglow', p, 8)).join('')}${rail.map((p, i) => glow('gglow', p, 7, 'gL' + (i % GC.length))).join('')}</g>
     <circle class="starglow" cx="1293" cy="72" r="70" fill="url(#gWarm)"/>
     <g transform="translate(${WZM.calendar[0]},${WZM.calendar[1]}) scale(1.72)">${calendarSvg}</g>
@@ -284,7 +308,7 @@ function wzModernScene(img, calendarSvg) {
     <rect class="hit" data-k="garden" x="${ix1}" y="${iy1}" width="${ix2 - ix1}" height="${iy2 - iy1}"/>
     <circle class="hit" data-k="wreath" cx="${wx}" cy="${wy + 20}" r="${wr + 30}"/>
     ${WZM.candles.map(([x, y, rr]) => `<circle class="hit" data-k="candles" cx="${x}" cy="${y}" r="${rr}"/>`).join('')}
-    <rect class="hit" data-k="music" x="960" y="440" width="70" height="80"/>`;
+    <rect class="hit" data-k="music" x="776" y="490" width="214" height="232"/>`;
 }
 
 class ChristmasRoomCard extends HTMLElement {
@@ -777,7 +801,7 @@ class ChristmasRoomCard extends HTMLElement {
   .tin { background:rgba(255,255,255,.06); color:#f5ead8; border:1px solid rgba(243,217,139,.3); border-radius:10px; padding:7px 10px; font:inherit; color-scheme:dark; }
   .tile.rnd { border-style:dashed; }
   .modern .lit { opacity:0; transition:opacity 1.1s ease; }
-  .tree-on .lit-tree, .door-on .lit-door, .garden-on .lit-garden, .wreath-on .lit-wreath { opacity:1; }
+  .tree-on .lit-tree, .door-on .lit-door, .garden-on .lit-garden, .wreath-on .lit-wreath, .music-on .lit-music { opacity:1; }
   .candles-on .lit-candles { opacity:1; animation: cflick 2.1s ease-in-out infinite; }
   .modern .tglow, .modern .dglow, .modern .kglow, .modern .gglow { mix-blend-mode:screen; }
   .tthumb { width:30px; height:30px; border-radius:7px; object-fit:cover; display:block; }
