@@ -3,16 +3,19 @@
 A cosy, animated Christmas living room for your Home Assistant dashboard.
 Every object in the room is tappable and runs a real action in your home.
 
-![Christmas Room Card](images/room.jpg)
+| Classic | Modern |
+|---|---|
+| ![Classic](images/room.jpg) | ![Modern](images/modern.jpg) |
 
 - **Christmas tree, balcony-door garland, garden lights (seen through the window) and a wreath** – each linked to an entity. The lights twinkle while the entity is on.
 - **Scent candles** – switch any entity, or control a **Pura** diffuser directly: both fragrance slots with fill level, intensity and timer.
 - **Music** – any `media_player`: up to 6 playlists as tiles – player favourites (e.g. Sonos) **and Spotify, radio stations or Music Assistant playlists** picked with the Home Assistant media browser. Shuffle, play/pause and volume.
 - **Schedule** – lights on at sunset (± offset) or at a fixed time, everything off at a set time. Editable right from the card (⚙️).
 - **Tear-off calendar** counting down the days until Christmas Eve.
+- **Two styles:** *classic* (illustrated, pure SVG) and *modern* (photo-realistic room where every lit area dims and lights up with its entity – or use your own background photo).
 - Full-screen, adapts to landscape and portrait (tablet, phone, wall panel).
 - Visual editor, German 🇩🇪 and English 🇬🇧 (follows your Home Assistant language).
-- Pure SVG + JavaScript – no images, no external dependencies.
+- Self-contained JavaScript – no external dependencies.
 
 | Music | Scent (Pura) | Schedule |
 |---|---|---|
@@ -45,6 +48,7 @@ The card looks best in a view of type **Panel** (one card, full screen). Add the
 
 ```yaml
 type: custom:christmas-room-card
+style: modern                     # classic (default) or modern
 title: Merry Christmas            # optional, default depends on language
 tree:
   entity: switch.christmas_tree
@@ -91,6 +95,8 @@ schedule:                           # optional, see below
 |---|---|
 | `title` | Heading. Default: "Merry Christmas" / "Frohe Weihnachten". |
 | `language` | `de` or `en`. Default: language of Home Assistant. |
+| `style` | `classic` (illustrated, default) or `modern` (photo). In the modern style everything starts dimmed; each switched-on object lights up its own area of the photo and twinkles. |
+| `background_image` | Modern style only: URL of your own 16:9 photo (e.g. `/local/my-room.jpg`). The tap areas are made for the bundled picture, so your photo should have a similar layout. |
 | `fit` | `auto` (default – always shows the whole room and extends wall/floor to fill the screen), `cover`, `contain`. |
 | `height` | Card height. Default: full screen below the header. `auto` = fixed 5:3 aspect ratio (for normal dashboards). |
 | `show_chips` | Show the buttons at the bottom (default `true`). |
@@ -137,6 +143,8 @@ The schedule runs in Home Assistant – it also works when no dashboard is open.
 Ein gemütliches, animiertes Weihnachts-Wohnzimmer fürs Dashboard. Jedes Objekt ist antippbar und schaltet etwas in deinem Zuhause: **Baum, Girlande an der Balkontür, Gartenbeleuchtung im Fenster, Kranz, Duftkerzen** (beliebige Entität oder direkt ein **Pura**-Duftspender mit Slots, Intensität und Timer) und **Musik** (jeder Media-Player – bis zu 6 Playlists aus Sonos-Favoriten, **Spotify, Radio oder Music Assistant** über die Medienauswahl, Zufall, Lautstärke). Dazu ein **Abreißkalender** als Countdown bis Heiligabend und ein **Zeitplan** (Lichter bei Sonnenuntergang ± Versatz oder zu fester Uhrzeit an, alles zu einer Endzeit aus), der direkt in der Karte über ⚙️ eingestellt wird.
 
 ![Deutsch](images/room_de.jpg)
+
+**Stil:** `style: classic` (gezeichnet, Standard) oder `style: modern` (Foto – jedes eingeschaltete Objekt leuchtet in seinem Bereich auf, alles andere bleibt gedimmt).
 
 **Installation:** *Einstellungen → Marketplace → Add from link* → `https://github.com/Severinius-MUC/christmas-room-card` (oder manuell wie oben beschrieben). Danach am besten eine Ansicht vom Typ **Panel** anlegen und die Karte „Christmas Room Card“ hinzufügen – alles Weitere im grafischen Editor.
 
