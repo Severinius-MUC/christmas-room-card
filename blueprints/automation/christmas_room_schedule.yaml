@@ -11,6 +11,14 @@ blueprint:
     "sunset" and "time" (German: "Sonnenuntergang" / "Uhrzeit"), an input_number for the
     sunset offset in minutes (e.g. −120 … 120, step 5) and two input_datetime helpers
     (time only) for start and end.
+
+
+    Choosing the lights: the automation does not list lights itself – it switches every
+    entity that carries the label selected below. Create a label (Settings → Areas, labels
+    & zones → Labels, e.g. "Christmas lights") and assign it: open a light or plug under
+    Settings → Devices & services → Entities → ⚙️ → Labels. To tag several at once, use the
+    selection mode in the entity list and "Add label". New lights with the label are picked
+    up automatically – no need to edit the automation.
   domain: automation
   source_url: https://github.com/Severinius-MUC/christmas-room-card/blob/main/blueprints/automation/christmas_room_schedule.yaml
   input:
