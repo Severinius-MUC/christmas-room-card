@@ -4,7 +4,7 @@
  * and runs a Home Assistant action. German + English UI.
  * https://github.com/Severinius-MUC/christmas-room-card  ·  MIT License
  */
-const WZ_VERSION = '1.2.0';
+const WZ_VERSION = '1.2.1';
 const WZ_I18N = {
   de: {
     title: 'Frohe Weihnachten', on: 'an', off: 'aus',
@@ -264,7 +264,12 @@ const WZ_GRAM = `
       <path d="M78 532 C76 482 40 456 15 430 L105 411 C80 452 90 492 90 532 Z" fill="url(#gBrass)"/>
       <ellipse cx="60" cy="420" rx="46" ry="21" transform="rotate(-12 60 420)" fill="url(#gBrass)"/>
       <ellipse cx="60" cy="421" rx="41" ry="17" transform="rotate(-12 60 421)" fill="url(#gHornIn)"/>`;
+// edge colours of the bundled photo – used to extend wall and floor on tall screens
+const WZ_EXT_TOP = '271c14 281c13 291d13 2b1d14 2d1e15 2f2118 302219 31231a 36261b 39291e 3b2b1f 3f2d21 412e22 412e22 433023 443224 453325 493628 4a3528 4d3629 473627 453324 443223 433122 433122 473024 4c3523 493224 473325 433122 3c2b20 36261c 31231a';
+const WZ_EXT_BOT = '352214 3c2417 442819 5a341b 4c2d19 43281a 3c2518 382418 332218 342116 352318 35241a 36251d 332219 342013 2f1d11 2a1a10 2c1b12 2c1b11 2c1b11 2b1a10 2e1c12 2f1c13 2f1d11 311e12 362113 3b2316 3c2417 3a2316 3a2215 362214 301e13 2c1c11';
 function wzModernScene(img, calendarSvg, sbHit) {
+  const bundled = img === WZ_MODERN_IMG;
+  const hgrad = (id, list) => `<linearGradient id="${id}" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="1600" y2="0">${list.split(' ').map((c, i, a) => `<stop offset="${(i / (a.length - 1)).toFixed(3)}" stop-color="#${c}"/>`).join('')}</linearGradient>`;
   const R = wzRng(1612);
   const [ox1, oy1, ox2, oy2] = WZM.doorOuter, [ix1, iy1, ix2, iy2] = WZM.doorInner;
   const [wx, wy, wr] = WZM.wreath;
@@ -315,9 +320,19 @@ function wzModernScene(img, calendarSvg, sbHit) {
       <mask id="mGarden"><rect x="${ix1}" y="${iy1}" width="${ix2 - ix1}" height="${iy2 - iy1}" fill="#fff"/><path d="M236 486 C268 470 318 474 342 506 L348 660 L236 660 Z" fill="#000" filter="url(#fSoft)"/></mask>
       <mask id="mWreath"><g filter="url(#fSoft)"><circle cx="${wx}" cy="${wy}" r="${wr + 8}" fill="#fff"/><rect x="${wx - 40}" y="${wy + 40}" width="80" height="110" fill="#fff"/></g><circle cx="${wx}" cy="${wy}" r="230" fill="url(#gSpill)" opacity=".7"/></mask>
       <mask id="mCandles"><g filter="url(#fSoft)">${WZM.candles.map(([x, y, rr]) => `<circle cx="${x}" cy="${y}" r="${rr}" fill="#fff"/>`).join('')}</g>${WZM.candles.map(([x, y, rr]) => `<circle cx="${x}" cy="${y - 20}" r="${rr * 2.6}" fill="url(#gSpill)"/>`).join('')}</mask>
+      ${bundled ? `${hgrad('gExtT', WZ_EXT_TOP)}${hgrad('gExtB', WZ_EXT_BOT)}
+      <linearGradient id="gExtShT" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="-900"><stop offset="0" stop-color="#080503" stop-opacity="0"/><stop offset=".55" stop-color="#080503" stop-opacity=".55"/><stop offset="1" stop-color="#080503" stop-opacity=".8"/></linearGradient>
+      <linearGradient id="gExtShB" gradientUnits="userSpaceOnUse" x1="0" y1="900" x2="0" y2="1700"><stop offset="0" stop-color="#0a0604" stop-opacity=".62"/><stop offset="1" stop-color="#0a0604" stop-opacity=".9"/></linearGradient>` : ''}
     </defs>
     <use href="#wzImg" filter="url(#fBg)" transform="translate(800 450) scale(3.4) translate(-800 -450)"/>
     <g class="lit lit-ceiling"><use href="#wzImg" filter="url(#fBg2)" transform="translate(800 450) scale(3.4) translate(-800 -450)"/></g>
+    ${bundled ? `<g filter="url(#fDim)"><rect x="-500" y="-3000" width="2600" height="3070" fill="url(#gExtT)"/><rect x="-500" y="830" width="2600" height="3000" fill="url(#gExtB)"/></g>
+    <g class="lit lit-ceiling"><rect x="-500" y="-3000" width="2600" height="3070" fill="url(#gExtT)"/><rect x="-500" y="830" width="2600" height="3000" fill="url(#gExtB)"/></g>
+    <rect x="-500" y="-3000" width="2600" height="3000" fill="url(#gExtShT)"/>
+    <!-- hanging stars, only visible on tall screens -->
+    ${[[300, -170, 1], [520, -90, 0.8], [690, -235, 1.05], [1010, -120, 0.9], [1235, -215, 1.1], [1440, -100, 0.85]].map(([x, y, sc], i) => `<line x1="${x}" y1="-3000" x2="${x}" y2="${y - 22 * sc}" stroke="#a8916a" stroke-opacity=".45" stroke-width="1.2"/>
+      <circle class="starglow mstarglow" cx="${x}" cy="${y}" r="${52 * sc}" fill="url(#gWarm)" style="animation-delay:-${(i * 0.7).toFixed(1)}s"/>
+      <polygon class="mstar" transform="translate(${x},${y}) scale(${sc * 1.15})" points="0,-24 6.5,-7 24,-7 10,3.5 15.5,21 0,10.5 -15.5,21 -10,3.5 -24,-7 -6.5,-7"/>`).join('')}` : ''}
     <g mask="url(#mEdge)">
     ${im('filter="url(#fDim)"')}
     <g class="lit lit-ceiling">${im('filter="url(#fBright)" mask="url(#mCeil)"')}</g>
@@ -328,13 +343,13 @@ function wzModernScene(img, calendarSvg, sbHit) {
     <g class="lit lit-tree">${im('mask="url(#mTree)"')}</g>
     </g>
     <rect class="fshade" x="0" y="640" width="1600" height="262" fill="url(#gFloorShade)"/>
+    ${bundled ? '<rect class="fshade" x="-500" y="901" width="2600" height="3000" fill="url(#gExtShB)"/>' : ''}
     <g class="lit lit-ceiling cone">
       <polygon points="762,140 838,140 1040,720 560,720" fill="url(#gCone)" filter="url(#fSoft)"/>
       <ellipse cx="800" cy="150" rx="190" ry="120" fill="url(#gWarm)" opacity=".55"/>
     </g>
     <g transform="translate(800,0)">
-      <rect x="-9" y="-2" width="18" height="6" rx="2" fill="#151515"/>
-      <line x1="0" y1="2" x2="0" y2="94" stroke="#3a3530" stroke-width="1.8"/>
+      <line x1="0" y1="-3000" x2="0" y2="94" stroke="#3a3530" stroke-width="1.8"/>
       <path d="M-7 94 H7 L10 104 H-10 Z" fill="#1b1b1b"/>
       <path d="M-48 138 C-46 114 -27 102 0 102 C27 102 46 114 48 138 Z" fill="#141414"/>
       <path d="M-40 128 C-36 114 -22 106 -6 105" stroke="#fff" stroke-opacity=".12" stroke-width="2" fill="none"/>
@@ -405,6 +420,12 @@ class ChristmasRoomCard extends HTMLElement {
     if (this._modern) {
       const a = r.height > 0 ? r.width / r.height : 16 / 9;
       const slice = mode === 'cover' || (mode === 'auto' && a >= 1.45 && a <= 2.1);
+      if (mode === 'auto' && a < 1.45 && r.width > 0) {
+        // portrait / tall: crop a little at the sides and extend wall + floor instead of stretching the photo
+        const W = a < 0.7 ? 1400 : 1520, x0 = a < 0.7 ? 175 : 70, H = W / a;
+        setBox(x0, -(H - 900) * (a < 0.7 ? 0.42 : 0.6), W, H, 'xMidYMid meet');
+        return;
+      }
       setBox(0, 0, 1600, 900, slice ? 'xMidYMid slice' : 'xMidYMid meet');
       return;
     }
@@ -896,6 +917,9 @@ class ChristmasRoomCard extends HTMLElement {
   .cone { mix-blend-mode:screen; pointer-events:none; }
   .lampon { opacity:0; transition:opacity .8s; } .ceiling-on .lampon { opacity:1; }
   .fshade { transition:opacity 1.1s; } .ceiling-on .fshade { opacity:.8; }
+  .mstar { fill:#6b5a35; stroke:#8a7448; stroke-width:1; transition:fill .6s, filter .6s; }
+  .tree-on .mstar { fill:#f0cf6a; stroke:#fff1b8; filter: drop-shadow(0 0 8px #ffd76a); }
+  .tree-on .mstarglow { animation: bpulse 3.2s ease-in-out infinite; }
   .sb-light { opacity:0; transition:opacity 1.2s ease; mix-blend-mode:screen; pointer-events:none; }
   .sideboard-on .sb-light { opacity:1; }
   .rdisp .eqb { opacity:.18; transform-box:fill-box; transform-origin:50% 100%; transform:scaleY(.25); }

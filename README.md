@@ -21,23 +21,27 @@ Every object in the room is tappable and runs a real action in your home.
 |---|---|---|
 | ![Music](images/music.jpg) | ![Scent](images/scent.jpg) | ![Schedule](images/schedule.jpg) |
 
-<img src="images/portrait.jpg" alt="Portrait" width="300">
+<img src="images/portrait.jpg" alt="Portrait – classic" width="300"> <img src="images/modern_portrait.jpg" alt="Portrait – modern" width="300">
 
 ---
 
 ## Installation
 
-### Marketplace / HACS (custom repository)
+### Marketplace / HACS (recommended)
+
+The card is part of the default catalog – no custom repository needed.
 
 [![Open in the Marketplace](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Severinius-MUC&repository=christmas-room-card&category=plugin)
 
-One click opens the card in your Home Assistant (Marketplace from 2026.11, HACS before) – or add it manually:
+1. Open **Settings → Marketplace** (HACS on Home Assistant 2026.10 and older) – or simply click the button above.
+2. Search for **Christmas Room Card** and install it.
+3. Reload the browser.
 
+<details>
+<summary>Fallback: add it as a custom repository</summary>
 
-1. Open **Settings → Marketplace** (HACS on Home Assistant 2026.10 and older).
-2. Choose **Add from link** (HACS: ⋮ → *Custom repositories*, category *Dashboard*) and enter
-   `https://github.com/Severinius-MUC/christmas-room-card`
-3. Install **Christmas Room Card** and reload the browser.
+Only needed if the card does not show up in the search (e.g. on an outdated catalog): **Marketplace → Add from link** (HACS: ⋮ → *Custom repositories*, category *Dashboard*) and enter `https://github.com/Severinius-MUC/christmas-room-card`.
+</details>
 
 ### Manual
 
@@ -153,7 +157,7 @@ Ein gemütliches, animiertes Weihnachts-Wohnzimmer fürs Dashboard. Jedes Objekt
 
 **Stil:** `style: classic` (gezeichnet, Standard) oder `style: modern` (Foto – jedes eingeschaltete Objekt leuchtet in seinem Bereich auf, die Lichterketten blinken, alles andere bleibt gedimmt; Musik kommt aus dem Smart-Radio neben dem Sessel). Optional `ceiling: { entity: light.… }` für das Deckenlicht (macht den ganzen Raum hell, folgt der Helligkeit) und `sideboard: { entity: light.… }` für die indirekte Beleuchtung unter dem Sideboard – übernimmt die Farbe des Lichts.
 
-**Installation:** *Einstellungen → Marketplace → Add from link* → `https://github.com/Severinius-MUC/christmas-room-card` (oder manuell wie oben beschrieben). Danach am besten eine Ansicht vom Typ **Panel** anlegen und die Karte „Christmas Room Card“ hinzufügen – alles Weitere im grafischen Editor.
+**Installation:** *Einstellungen → Marketplace* öffnen, nach **Christmas Room Card** suchen und installieren (oder den Button oben anklicken). Nur falls sie nicht gefunden wird: *Add from link* → `https://github.com/Severinius-MUC/christmas-room-card`, oder manuell wie oben beschrieben. Danach am besten eine Ansicht vom Typ **Panel** anlegen und die Karte „Christmas Room Card“ hinzufügen – alles Weitere im grafischen Editor.
 
 **Zeitplan:** Helfer anlegen (Schalter, Dropdown mit `Sonnenuntergang` und `Uhrzeit` – oder `sunset`/`time`, Zahl für den Versatz, zwei Zeit-Helfer), ein Label wie „Weihnachtslicht“ an alle Lichter vergeben, den Blueprint oben importieren und die Helfer in der Karte unter „Zeitplan“ eintragen. Die Karte ist zweisprachig und folgt der Sprache von Home Assistant (Option `language: de` erzwingt Deutsch).
 
